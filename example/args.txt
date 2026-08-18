@@ -1,0 +1,1 @@
+-lambda 0.5 -mu 1.0 -servers 1 -customers 8000 -seed 42
