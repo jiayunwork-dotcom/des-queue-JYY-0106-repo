@@ -118,7 +118,7 @@ type TimeSeriesPoint struct {
 func (r *Recorder) QueueLenTimeSeries() []TimeSeriesPoint {
 	out := make([]TimeSeriesPoint, len(r.Samples))
 	for i, s := range r.Samples {
-		out[i] = TimeSeriesPoint{Time: s.Time}
+		out[i] = TimeSeriesPoint{Time: s.Time, Value: float64(s.QueueLen)}
 	}
 	return out
 }
@@ -127,7 +127,11 @@ func (r *Recorder) QueueLenTimeSeries() []TimeSeriesPoint {
 func (r *Recorder) UtilizationTimeSeries(totalServers int) []TimeSeriesPoint {
 	out := make([]TimeSeriesPoint, len(r.Samples))
 	for i, s := range r.Samples {
-		out[i] = TimeSeriesPoint{Time: s.Time}
+		util := 0.0
+		if totalServers > 0 {
+			util = float64(s.BusyCount) / float64(totalServers)
+		}
+		out[i] = TimeSeriesPoint{Time: s.Time, Value: util}
 	}
 	return out
 }
